@@ -1,0 +1,45 @@
+
+syntax = "proto3";
+
+service FileMgmt {
+  // List files in a specified directory with possibly a filename filter applied
+  rpc ListFiles (ListFilesRequest) returns (ListFilesReply) {}
+  // Get content of a spcific file
+  rpc ReadFile (ReadFileRequest) returns (ReadFileReply) {}
+}
+
+message ListFilesRequest {
+  // The Sharepoint site ID to list. Use this or driveId
+  string siteId = 1;
+  // The Sharepoint drive ID to list. Use this or siteId
+  string driveId = 2;
+  // The directory path. The "root" is the default.
+  string path = 3;
+  // The file name RegExp pattern to search for. "" is the default matching everything.
+  string pattern = 4;
+}
+
+message ListFilesReply {
+  // A list of files in JSON-format that match the request
+  string files = 1;
+}
+
+message ReadFileRequest {
+  // The Sharepoint site ID the file is located in. Use this or driveId
+  string siteId = 1;
+  // The Sharepoint drive ID the file is located in. Use this or siteId
+  string driveId = 2;
+  // The directory path where the file is located. The "root" is the default.
+  string path = 3;
+  // The name of the file. Use this or fileId
+  string fileName = 4;
+  // The fileId (itemId) of the file. Use this or fileName
+  string fileId = 5;
+}
+
+message ReadFileReply {
+  // The file type
+  string type = 1;
+  // The file content
+  bytes content = 2;
+}
