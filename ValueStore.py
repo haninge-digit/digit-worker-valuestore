@@ -18,6 +18,10 @@ Environment
 """
 FILE_MGMT_SERVICE = os.getenv('FILE_MGMT_SERVICE',"file-mgmt.worker-services:50051")
 
+SITE_ID = os.getenv('SITE_ID', None)
+DRIVE_ID = os.getenv('DRIVE_ID', None)
+FOLDER_PATH = os.getenv('FOLDER_PATH', None)
+
 CASH_AGED = 60      # Keep values in cash for 60 seconds
 
 """
@@ -34,15 +38,12 @@ class ValueStore(object):
 
     queue_name = "valuestore"        # Name of the Zeebe task queue. Will also influence the worker process ID and name
 
-    _siteId = "ff53cbb5-03a7-43d8-80fe-572d2b9f5c48"            # https://violaberg.sharepoint.com/sites/DigiT-Fillagringfrprocesser
-    _driveId = 'b!tctT_6cD2EOA_lctK59cSJ2NRP6b7jJBqUYTEIU6Aw0oshK5OhyKQZb_94Z2y9cP'      # The drive of the site
 
     """
     Init function. Creates an empty cash
     """
     def __init__(self, async_loop=None):
         self._value_cash = {}                                            # Cash values from previons runs for faster retrieval
-        pass
 
 
     async def worker(self, vars):
@@ -59,7 +60,7 @@ class ValueStore(object):
                 stub = file_mgmt_pb2_grpc.FileMgmtStub(channel)
 
                 start_time = time.perf_counter()
-                req = file_mgmt_pb2.ReadFileRequest(siteId=self._siteId, driveId=self._driveId, path="Värdeförråd", fileName=file_name)
+                req = file_mgmt_pb2.ReadFileRequest(siteId=SITE_ID, driveId=DRIVE_ID, path=FOLDER_PATH, fileName=file_name)
                 resp = await stub.ReadFile(req)
                 elapsed_time = time.perf_counter() - start_time
                 logging.debug(f"File read in {elapsed_time:0.2f} seconds.")
@@ -99,7 +100,7 @@ class ValueStore(object):
                     store[key_val] = []
                 else:
                     if cell.value:
-                        store[headers[col]].append(cell.value.strip(u'\u200b'))
+                        store[headers[col]].append(cell.value.strip(u'\u200b'))     # Remove 'ZERO WIDTH SPACE' characters
                 col += 1
 
             if first_row:
