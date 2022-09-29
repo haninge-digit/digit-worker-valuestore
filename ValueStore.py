@@ -100,7 +100,12 @@ class ValueStore(object):
                     store[key_val] = []
                 else:
                     if cell.value:
-                        store[headers[col]].append(cell.value.strip(u'\u200b'))     # Remove 'ZERO WIDTH SPACE' characters
+                        if type(cell.value) is str:
+                            store[headers[col]].append(cell.value.strip(u'\u200b'))     # Remove 'ZERO WIDTH SPACE' characters
+                        elif type(cell.value) is int:
+                            store[headers[col]].append(str(cell.value))     # Convert int to string
+                        else:
+                            store[headers[col]].append(f"Unhandled type {type(cell.value)} in {cell.coordinate}")     # Unhandled format
                 col += 1
 
             if first_row:
