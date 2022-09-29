@@ -37,11 +37,11 @@ class ValueStore(object):
     _siteId = "ff53cbb5-03a7-43d8-80fe-572d2b9f5c48"            # https://violaberg.sharepoint.com/sites/DigiT-Fillagringfrprocesser
     _driveId = 'b!tctT_6cD2EOA_lctK59cSJ2NRP6b7jJBqUYTEIU6Aw0oshK5OhyKQZb_94Z2y9cP'      # The drive of the site
 
-    _value_cash = {}                                            # Cash values from previons runs for faster retrieval
     """
     Init function. Creates an empty cash
     """
     def __init__(self, async_loop=None):
+        self._value_cash = {}                                            # Cash values from previons runs for faster retrieval
         pass
 
 
@@ -94,11 +94,12 @@ class ValueStore(object):
 
             for cell in row:
                 if first_row:
-                    headers[col] = cell.value
-                    store[cell.value] = []
+                    key_val = cell.value.strip(u'\u200b')
+                    headers[col] = key_val
+                    store[key_val] = []
                 else:
                     if cell.value:
-                        store[headers[col]].append(cell.value)
+                        store[headers[col]].append(cell.value.strip(u'\u200b'))
                 col += 1
 
             if first_row:
