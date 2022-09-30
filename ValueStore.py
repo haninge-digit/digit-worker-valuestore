@@ -45,6 +45,8 @@ class ValueStore(object):
     def __init__(self, async_loop=None):
         self._value_cash = {}                                            # Cash values from previons runs for faster retrieval
 
+        logging.info(f"New valuestore worker using FOLDER_PATH at '{FOLDER_PATH}' with SITE_ID='{SITE_ID}' and DRIVE_ID='{DRIVE_ID}'")
+
 
     async def worker(self, vars):
         if 'valueStore' not in vars:
