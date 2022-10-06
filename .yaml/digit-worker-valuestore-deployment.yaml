@@ -29,6 +29,21 @@ spec:
               value: camunda-zeebe-gateway.camunda-zeebe:26500
             - name: FILE_MGMT_SERVICE
               value: file-mgmt.worker-services:50051
+            - name: SITE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: valuestore-config
+                  key: SITE_ID
+            - name: DRIVE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: valuestore-config
+                  key: DRIVE_ID
+            - name: FOLDER_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: valuestore-config
+                  key: FOLDER_PATH
           resources:    # Might need to be tailored
             limits:
               memory: "128Mi"

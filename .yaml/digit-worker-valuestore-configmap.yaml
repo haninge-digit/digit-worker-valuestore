@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: valuestore-config
+  namespace: camunda-workers
+data:
+  SITE_ID: <site_id>  # Set to correct value
+  DRIVE_ID: <drive_id>  # Set to correct value
+  FOLDER_PATH: <folder_path>  # Set to correct value
