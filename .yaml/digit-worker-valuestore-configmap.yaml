@@ -4,6 +4,6 @@ metadata:
   name: valuestore-config
   namespace: camunda-workers
 data:
-  SITE_ID: <site_id>  # Set to correct value
-  DRIVE_ID: <drive_id>  # Set to correct value
-  FOLDER_PATH: <folder_path>  # Set to correct value
+  SITE_ID: 8d82bf75-be30-4eb1-b17e-341c108f40e2
+  DRIVE_ID: b!db-CjTC-sU6xfjQcEI9A4vpI5RJSHz5OgEc_N4A6I7uL0l6eckglRqQZ1knJVs4J
+  FOLDER_PATH: Fillagring för Camunda processer/Värdeförråd

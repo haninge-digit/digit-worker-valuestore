@@ -1,0 +1,68 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: valuestore
+  namespace: camunda-workers
+  labels:
+    app: digit-plattform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: valuestore
+  template:
+    metadata:
+      labels:
+        app: valuestore
+        app.kubernetes.io/name: valuestore
+    spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      containers:
+        - name: valuestore
+          image: ghcr.io/haninge-digit/digit-worker-valuestore:main   # Set tag to "lab" for lab versions and "latest" for production versions
+          imagePullPolicy: Always
+          env:
+            - name: DEBUG
+              value: 'false'  # Change to 'true' for debugging
+            - name: ZEEBE_ADDRESS
+              value: camunda-zeebe-gateway.camunda-zeebe:26500
+            - name: FILE_MGMT_SERVICE
+              value: filemgmt:50051
+            - name: SITE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: valuestore-config
+                  key: SITE_ID
+            - name: DRIVE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: valuestore-config
+                  key: DRIVE_ID
+            - name: FOLDER_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: valuestore-config
+                  key: FOLDER_PATH
+          resources:    # Might need to be tailored
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          securityContext: {}
+      tolerations:
+      - key: "kubernetes.azure.com/scalesetpriority"
+        operator: "Equal"
+        value: "spot"
+        effect: "NoSchedule"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
