@@ -1,5 +1,5 @@
 # openpyxl is for the worker
-openpyxl>=3.0.10,<3.1.0
+openpyxl>=3.0.10,<3.2.0
 
 # The next three are for Zeebe communication
 zeebe-grpc>=8.0.4,<8.1.0
